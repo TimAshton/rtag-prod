@@ -8,3 +8,9 @@ In order to run a local dev server, use docker-compose.
 # Start local dev server.
 docker-compose up
 ```
+
+### Linting
+Run Flake8 from the repo root directory for a linting report.
+```bash
+flake8
+```
