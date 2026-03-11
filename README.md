@@ -1,8 +1,10 @@
 # rtag-prod
-Prod stack for rTag, the game.
+The production stack for rTag, the game.
 
-## Local Dev
-### Run Local Server
-- Pull repo.
-- Build docker image.
-- Run docker-compose up.
+## Local Development
+In order to run a local dev server, use docker-compose.
+
+```bash
+# Start local dev server.
+docker-compose up
+```
