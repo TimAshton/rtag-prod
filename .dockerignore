@@ -1,0 +1,12 @@
+.git
+.gitignore
+
+.docker
+
+rtag/__pycache__/
+rtag/*/__pycache__/
+rtag/*/*/__pycache__/
+rtag/*/*/*/__pycache__/
+.env/
+.venv/
+venv/
