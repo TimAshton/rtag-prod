@@ -23,4 +23,5 @@ urlpatterns = [
     path('rtags/', include('rtags.urls')),
     path('scoreboard/', include('scoreboard.urls')),
     path('users/', include('users.urls')),
+    path('api/', include('api.urls')),
 ]

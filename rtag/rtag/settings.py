@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'rtags',
     'scoreboard',
     'users',
+    'rest_framework',
+    'api',
 ]
 
 MIDDLEWARE = [
