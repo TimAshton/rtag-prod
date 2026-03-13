@@ -10,11 +10,15 @@ class ChallengeSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         return Challenge.objects.create(**validated_data)
-    
+
     def update(self, instance, validated_data):
         instance.title = validated_data.get("title", instance.title)
-        instance.description = validated_data.get("description", instance.description)
-        instance.created_date = validated_data.get("created_date", instance.created_date)
+        instance.description = validated_data.get(
+            "description",
+            instance.description)
+        instance.created_date = validated_data.get(
+            "created_date",
+            instance.created_date)
         instance.status = validated_data.get("status", instance.status)
         # Do all fields
         instance.save()
