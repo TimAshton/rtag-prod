@@ -23,6 +23,11 @@ class ChallengeSerializer(serializers.Serializer):
         # Do all fields
         instance.save()
         return instance
+    
+class ChallengeModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Challenge
+        fields = [ 'title', 'description', 'created_date', 'status']
 
 
 class RtagSerializer(serializers.Serializer):

@@ -1,47 +1,78 @@
 # from django.shortcuts import render
-from django.http import JsonResponse
 from .models import Challenge
 import io
 from rest_framework.parsers import JSONParser
-from .serializers import ChallengeSerializer
+from .serializers import ChallengeSerializer, ChallengeModelSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
-
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 # Create your views here.
-@csrf_exempt
+@api_view(['GET','PUT','PATCH'])
 def challenge(req, id):
     data = Challenge.objects.get(id=id)
     if req.method == "PUT":
-        stream = io.BytesIO(req.body)
-        parsed_data = JSONParser().parse(stream)
-        serializer = ChallengeSerializer(data, data=parsed_data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse({"update": "success"})
+        parsed_data = req.data
+        serializer = ChallengeModelSerializer(data, data=parsed_data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"update": "success"})
 
-        return JsonResponse(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
-    serializer = ChallengeSerializer(data)
-    return JsonResponse(serializer.data)
+    if req.method == "GET":
+        serializer = ChallengeModelSerializer(data)
+        return Response(serializer.data)
 
 
-@csrf_exempt
+@api_view(['GET','POST'])
 def challenges(req):
     if req.method == "POST":
-        json = req.body
-        stream = io.BytesIO(json)
-        parsed_data = JSONParser().parse(stream)
+        parsed_data = req.data
 
-        serializer = ChallengeSerializer(data=parsed_data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(
-                {"created": "success"},
-                status=status.HTTP_201_CREATED)
-        return JsonResponse(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST)
-    data = Challenge.objects.all()
-    serializer = ChallengeSerializer(data, many=True)
-    return JsonResponse(serializer.data, safe=False)
+        serializer = ChallengeModelSerializer(data=parsed_data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(
+            {"created": "success"},
+            status=status.HTTP_201_CREATED)
+
+    if req.method == "GET":
+        data = Challenge.objects.all()
+        serializer = ChallengeModelSerializer(data, many=True)
+        return Response(serializer.data)
+
+
+class ChallengesAPIView(APIView):
+    def get(self, req):
+        data = Challenge.objects.all()
+        serializer = ChallengeModelSerializer(data, many=True)
+        return Response(serializer.data)
+
+    def post(self, req):
+        parsed_data = req.data
+
+        serializer = ChallengeModelSerializer(data=parsed_data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(
+            {"created": "success"},
+            status=status.HTTP_201_CREATED)
+    
+class ChallengeAPIView(APIView):
+    def get(self, req, id):
+        data = Challenge.objects.get(id=id)
+        serializer = ChallengeModelSerializer(data)
+        return Response(serializer.data)
+
+    def put(self, req, id):
+        data = Challenge.objects.get(id=id)
+        parsed_data = req.data
+        serializer = ChallengeModelSerializer(data, data=parsed_data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"update": "success"})
+
+    def patch(self, req):
+        # data = Challenge.objects.get(id=id)
+        pass
