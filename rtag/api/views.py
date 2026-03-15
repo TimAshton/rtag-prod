@@ -1,16 +1,14 @@
 # from django.shortcuts import render
 from .models import Challenge
-import io
-from rest_framework.parsers import JSONParser
-from .serializers import ChallengeSerializer, ChallengeModelSerializer
-from django.views.decorators.csrf import csrf_exempt
+from .serializers import ChallengeModelSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+
 # Create your views here.
-@api_view(['GET','PUT','PATCH'])
+@api_view(['GET', 'PUT', 'PATCH'])
 def challenge(req, id):
     data = Challenge.objects.get(id=id)
     if req.method == "PUT":
@@ -25,7 +23,7 @@ def challenge(req, id):
         return Response(serializer.data)
 
 
-@api_view(['GET','POST'])
+@api_view(['GET', 'POST'])
 def challenges(req):
     if req.method == "POST":
         parsed_data = req.data
@@ -58,7 +56,8 @@ class ChallengesAPIView(APIView):
         return Response(
             {"created": "success"},
             status=status.HTTP_201_CREATED)
-    
+
+
 class ChallengeAPIView(APIView):
     def get(self, req, id):
         data = Challenge.objects.get(id=id)
